@@ -9,7 +9,16 @@ public partial class Player : CharacterBody2D
 	public AnimatedSprite2D RunAnimation { get; set; }
 
 	[Export]
+	public AnimatedSprite2D JumpAnimation { get; set; }
+
+	[Export]
 	public AnimatedSprite2D AttackAnimation { get; set; }
+
+	[Export]
+	public AnimatedSprite2D HitAnimation { get; set; }
+
+	[Export]
+	public AnimatedSprite2D DeathAnimation { get; set; }
 
 	public const float Speed = 300.0f;
 	public const float JumpVelocity = -400.0f;
