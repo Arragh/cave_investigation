@@ -2,56 +2,87 @@ using Godot;
 
 public partial class Player : CharacterBody2D
 {
-	[Export]
-	public AnimatedSprite2D IdleAnimation { get; set; }
+	private string _currentAnimation = string.Empty;
 
 	[Export]
-	public AnimatedSprite2D RunAnimation { get; set; }
+	public AnimatedSprite2D Animation { get; set; }
 
 	[Export]
-	public AnimatedSprite2D JumpAnimation { get; set; }
+	public Camera2D Camera { get; set; }
 
 	[Export]
-	public AnimatedSprite2D AttackAnimation { get; set; }
+	public int Speed = 400;
 
 	[Export]
-	public AnimatedSprite2D HitAnimation { get; set; }
+	public int Gravity = 2000;
 
 	[Export]
-	public AnimatedSprite2D DeathAnimation { get; set; }
+	public int JumpForce = 900;
 
-	public const float Speed = 300.0f;
-	public const float JumpVelocity = -400.0f;
+	public override void _Ready()
+	{
+
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = Velocity;
 
-		// Add the gravity.
-		if (!IsOnFloor())
-		{
-			velocity += GetGravity() * (float)delta;
-		}
+		// Движение влево/вправо
+		float direction = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+		velocity.X = direction * Speed;
 
-		// Handle Jump.
-		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
+		if (this.IsOnFloor())
 		{
-			velocity.Y = JumpVelocity;
-		}
+			if (velocity.Y > 0)
+			{
+				velocity.Y = 0;
+			}
 
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		Vector2 direction = Input.GetVector("walk_left", "walk_right", "walk_up", "walk_down");
-		if (direction != Vector2.Zero)
-		{
-			velocity.X = direction.X * Speed;
+			// Прыжок
+			if (Input.IsActionJustPressed("jump"))
+			{
+				velocity.Y = -JumpForce;
+				PlayAnimation("jump", velocity);
+			}
+			else if (velocity.X != 0)
+			{
+				PlayAnimation("run", velocity);
+			}
+			else
+			{
+				PlayAnimation("idle", velocity);
+			}
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+			velocity.Y += Gravity * (float)delta;
+			PlayAnimation("jump", velocity);
 		}
 
-		Velocity = velocity;
-		MoveAndSlide();
+		// Записываем обновлённую скорость
+		this.Velocity = velocity;
+
+		// Двигаем тело (без этого коллизий не будет!)
+		this.MoveAndSlide();
+	}
+
+	private void PlayAnimation(string animation, Vector2 velocity)
+	{
+		if (_currentAnimation == animation)
+		{
+			return;
+		}
+
+		Animation.Play(animation);
+
+		if (velocity.X < 0)
+		{
+			Animation.FlipH = true;
+		}
+		else if (velocity.X > 0)
+		{
+			Animation.FlipH = false;
+		}
 	}
 }
