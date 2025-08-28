@@ -21,7 +21,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-
+		// Тут что-то будет
 	}
 
 	public override void _PhysicsProcess(double delta)
