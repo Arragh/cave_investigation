@@ -5,7 +5,7 @@ public partial class Player : CharacterBody2D
 {
 	private Vector2 _velocity = Vector2.Zero;
 	private PlayerState _currentState = PlayerState.Idle;
-	private PlayerState _lastState;
+	private PlayerState _lastState = PlayerState.Jump;
 	private float _direction = 1;
 
 	[Export]
@@ -42,7 +42,7 @@ public partial class Player : CharacterBody2D
 		}
 
 		// Движение влево/вправо
-		_direction = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+		_direction = Input.GetActionStrength("action_right") - Input.GetActionStrength("action_left");
 		_velocity.X = _direction * Speed;
 
 		if (this.IsOnFloor())
@@ -53,12 +53,12 @@ public partial class Player : CharacterBody2D
 			}
 
 			// Прыжок
-			if (Input.IsActionJustPressed("jump"))
+			if (Input.IsActionJustPressed("action_jump"))
 			{
 				_velocity.Y = -JumpForce;
 				_currentState = PlayerState.Jump;
 			}
-			else if (Input.IsActionJustPressed("attack"))
+			else if (Input.IsActionJustPressed("action_attack"))
 			{
 				_velocity.X = 0;
 				_currentState = PlayerState.Attack;
