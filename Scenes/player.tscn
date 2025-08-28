@@ -347,6 +347,7 @@ AnimatedSprite2D = NodePath("AnimatedSprite2D")
 Camera2D = NodePath("Camera2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
 position = Vector2(10, -20)
 sprite_frames = SubResource("SpriteFrames_5x828")
 animation = &"idle"

@@ -349,11 +349,11 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sfdtf"]
 height = 32.0
 
-[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("Animation")]
+[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D")]
 texture_filter = 1
 scale = Vector2(5, 5)
 script = ExtResource("1_81u3t")
-Animation = NodePath("AnimatedSprite2D")
+AnimatedSprite2D = NodePath("AnimatedSprite2D")
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
