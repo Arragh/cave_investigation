@@ -43,21 +43,22 @@ public partial class Player : CharacterBody2D
 			if (Input.IsActionJustPressed("jump"))
 			{
 				velocity.Y = -JumpForce;
-				PlayAnimation("jump", velocity);
+				PlayAnimation("jump");
 			}
 			else if (velocity.X != 0)
 			{
-				PlayAnimation("run", velocity);
+				Animation.FlipH = velocity.X < 0;
+				PlayAnimation("run");
 			}
 			else
 			{
-				PlayAnimation("idle", velocity);
+				PlayAnimation("idle");
 			}
 		}
 		else
 		{
 			velocity.Y += Gravity * (float)delta;
-			PlayAnimation("jump", velocity);
+			PlayAnimation("jump");
 		}
 
 		// Записываем обновлённую скорость
@@ -67,7 +68,7 @@ public partial class Player : CharacterBody2D
 		this.MoveAndSlide();
 	}
 
-	private void PlayAnimation(string animation, Vector2 velocity)
+	private void PlayAnimation(string animation)
 	{
 		if (_currentAnimation == animation)
 		{
@@ -75,14 +76,5 @@ public partial class Player : CharacterBody2D
 		}
 
 		Animation.Play(animation);
-
-		if (velocity.X < 0)
-		{
-			Animation.FlipH = true;
-		}
-		else if (velocity.X > 0)
-		{
-			Animation.FlipH = false;
-		}
 	}
 }

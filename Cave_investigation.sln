@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hight_forest_the_game", "Hight_forest_the_game.csproj", "{9AA0782C-33A6-41A4-97EA-B126DC4256D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cave_investigation", "Cave_investigation.csproj", "{9AA0782C-33A6-41A4-97EA-B126DC4256D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
