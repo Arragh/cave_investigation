@@ -1,14 +1,18 @@
+using Cave_investigation.Enums;
 using Godot;
 
 public partial class Player : CharacterBody2D
 {
-	private string _currentAnimation = string.Empty;
+	private Vector2 _velocity = Vector2.Zero;
+	private PlayerState _currentState = PlayerState.Idle;
+	private PlayerState _lastState;
+	private float _direction = 1;
 
 	[Export]
-	public AnimatedSprite2D Animation { get; set; }
+	public AnimatedSprite2D AnimatedSprite2D { get; set; }
 
 	[Export]
-	public Camera2D Camera { get; set; }
+	public Camera2D Camera2D { get; set; }
 
 	[Export]
 	public int Speed = 400;
@@ -21,60 +25,122 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-		// Тут что-то будет
+		AnimatedSprite2D.AnimationFinished += OnAnimationFinished;
+	}
+
+	public override void _Process(double delta)
+	{
+		FlipHorizontally();
+		PlayAnimation();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		Vector2 velocity = Velocity;
+		if (_currentState == PlayerState.Attack)
+		{
+			return;
+		}
 
 		// Движение влево/вправо
-		float direction = Input.GetActionStrength("right") - Input.GetActionStrength("left");
-		velocity.X = direction * Speed;
+		_direction = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+		_velocity.X = _direction * Speed;
 
 		if (this.IsOnFloor())
 		{
-			if (velocity.Y > 0)
+			if (_velocity.Y > 0)
 			{
-				velocity.Y = 0;
+				_velocity.Y = 0;
 			}
 
 			// Прыжок
 			if (Input.IsActionJustPressed("jump"))
 			{
-				velocity.Y = -JumpForce;
-				PlayAnimation("jump");
+				_velocity.Y = -JumpForce;
+				_currentState = PlayerState.Jump;
 			}
-			else if (velocity.X != 0)
+			else if (Input.IsActionJustPressed("attack"))
 			{
-				Animation.FlipH = velocity.X < 0;
-				PlayAnimation("run");
+				_velocity.X = 0;
+				_currentState = PlayerState.Attack;
+			}
+			else if (_velocity.X != 0)
+			{
+				_currentState = PlayerState.Run;
 			}
 			else
 			{
-				PlayAnimation("idle");
+				_currentState = PlayerState.Idle;
 			}
 		}
 		else
 		{
-			velocity.Y += Gravity * (float)delta;
-			PlayAnimation("jump");
+			_velocity.Y += Gravity * (float)delta;
 		}
 
 		// Записываем обновлённую скорость
-		this.Velocity = velocity;
+		this.Velocity = _velocity;
 
 		// Двигаем тело (без этого коллизий не будет!)
 		this.MoveAndSlide();
 	}
 
-	private void PlayAnimation(string animation)
+	private void FlipHorizontally()
 	{
-		if (_currentAnimation == animation)
+		if (_direction == 0)
 		{
 			return;
 		}
 
-		Animation.Play(animation);
+		if (_velocity.X < 0 && _direction == 1)
+			{
+				_direction = -1;
+			}
+			else if (_velocity.X > 0 && _direction == -1)
+			{
+				_direction = 1;
+			}
+
+		AnimatedSprite2D.FlipH = _direction == -1;
+	}
+
+	private void PlayAnimation()
+	{
+		if (_lastState == _currentState)
+		{
+			return;
+		}
+
+		switch (_currentState)
+		{
+			case PlayerState.Idle:
+				AnimatedSprite2D.Play("idle");
+				break;
+
+			case PlayerState.Run:
+				AnimatedSprite2D.Play("run");
+				break;
+
+			case PlayerState.Jump:
+				AnimatedSprite2D.Play("jump");
+				break;
+
+			case PlayerState.Attack:
+				AnimatedSprite2D.Play("attack");
+				break;
+
+			case PlayerState.Dead:
+				AnimatedSprite2D.Play("dead");
+				break;
+		}
+
+		_lastState = _currentState;
+	}
+
+	private void OnAnimationFinished()
+	{
+		if (_currentState == PlayerState.Attack)
+		{
+			_currentState = PlayerState.Idle;
+		}
 	}
 }
