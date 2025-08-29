@@ -9,6 +9,7 @@ public abstract partial class Enemy : CharacterBody2D
     private RayCast2D _currentRayCast2D => _direction == -1 ? RayCastLeft : RayCastRight;
     private EnemyState _currentState = EnemyState.Walk;
     private EnemyState _lastState = EnemyState.Idle;
+	private Player _player = null;
 
     [Export]
     public int Speed = 100;
@@ -40,6 +41,7 @@ public abstract partial class Enemy : CharacterBody2D
 	public override void _Process(double delta)
 	{
 		PlayAnimation();
+		UpdateFlipH();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -62,11 +64,22 @@ public abstract partial class Enemy : CharacterBody2D
 		if (Velocity.X != 0)
 		{
 			_currentState = EnemyState.Walk;
-			AnimatedSprite2D.FlipH = _direction == -1;
 		}
 
 		MoveAndSlide();
 		CheckEdge();
+	}
+
+	private void UpdateFlipH()
+	{
+		if (_currentState == EnemyState.Attack && _player != null)
+		{
+			AnimatedSprite2D.FlipH = _player.GlobalPosition.X < GlobalPosition.X;
+		}
+		else
+		{
+			AnimatedSprite2D.FlipH = _direction == -1;
+		}
 	}
 
 	private void CheckEdge()
@@ -74,23 +87,18 @@ public abstract partial class Enemy : CharacterBody2D
 		if (!_currentRayCast2D.IsColliding())
 		{
 			_direction *= -1;
-			AnimatedSprite2D.FlipH = _direction == -1;
 		}
 	}
 
 	private void OnAttackAreaBodyEntered(Node body)
 	{
-		if (body is Player player && _currentState != EnemyState.Attack)
+		if (body is Player player)
 		{
-			if (player.Position.X < Position.X)
-			{
-				AnimatedSprite2D.FlipH = true;
-			}
-			else
-			{
-				AnimatedSprite2D.FlipH = false;
-			}
+			_player = player;
+		}
 
+		if (_player != null && _currentState != EnemyState.Attack)
+		{
 			_currentState = EnemyState.Attack;
 		}
 	}
@@ -99,6 +107,7 @@ public abstract partial class Enemy : CharacterBody2D
 	{
 		if (body is Player)
 		{
+			_player = null;
 			_currentState = EnemyState.Idle;
 		}
 	}
