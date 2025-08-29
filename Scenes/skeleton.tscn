@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://hjri31e1ot81"]
+[gd_scene load_steps=51 format=3 uid="uid://hjri31e1ot81"]
 
 [ext_resource type="Script" uid="uid://d3appjhwfqr2f" path="res://Scripts/Skeleton.cs" id="1_81u3t"]
 [ext_resource type="Texture2D" uid="uid://bncfx1fb1ngh6" path="res://Assets/Tiles/Skeleton/Skeleton.png" id="1_sfdtf"]
@@ -270,7 +270,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_pspbd")
 }],
 "loop": true,
-"name": &"death",
+"name": &"dead",
 "speed": 5.0
 }, {
 "frames": [{
@@ -349,18 +349,41 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sfdtf"]
 height = 32.0
 
-[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_81u3t"]
+
+[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "RayCastLeft", "RayCastRight", "AttackArea")]
 texture_filter = 1
 scale = Vector2(5, 5)
 script = ExtResource("1_81u3t")
 AnimatedSprite2D = NodePath("AnimatedSprite2D")
-metadata/_edit_group_ = true
+RayCastLeft = NodePath("RayCast2D2Left")
+RayCastRight = NodePath("RayCast2DRight")
+AttackArea = NodePath("Area2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(23, -16)
+position = Vector2(22, -16)
 sprite_frames = SubResource("SpriteFrames_n7qbd")
-animation = &"walk"
+animation = &"dead"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(22.4, -16)
+position = Vector2(22, -16)
 shape = SubResource("CapsuleShape2D_sfdtf")
+
+[node name="RayCast2DRight" type="RayCast2D" parent="."]
+position = Vector2(22, -16)
+target_position = Vector2(16, 32)
+
+[node name="RayCast2D2Left" type="RayCast2D" parent="."]
+position = Vector2(22, -16)
+target_position = Vector2(-16, 32)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="AttackAreaRight" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(42, -16)
+shape = SubResource("CircleShape2D_81u3t")
+
+[node name="AttackAreaLeft" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(2, -16)
+scale = Vector2(1, 1)
+shape = SubResource("CircleShape2D_81u3t")

@@ -75,6 +75,11 @@ public partial class Player : CharacterBody2D
 		else
 		{
 			_velocity.Y += Gravity * (float)delta;
+			
+			if (_velocity.Y != 0)
+			{
+				_currentState = PlayerState.Jump;
+			}
 		}
 
 		// Записываем обновлённую скорость
