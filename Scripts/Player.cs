@@ -1,3 +1,4 @@
+using Cave_investigation.Abstracts;
 using Cave_investigation.Enums;
 using Godot;
 
@@ -7,12 +8,24 @@ public partial class Player : CharacterBody2D
 	private PlayerState _currentState = PlayerState.Idle;
 	private PlayerState _lastState = PlayerState.Jump;
 	private float _direction = 1;
+	private float _lastDirection = 1;
+	private int _currentHealth = 0;
+	private Enemy _enemy = null;
 
 	[Export]
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
 
 	[Export]
+	public CollisionShape2D CollisionShape2D { get; set; }
+
+	[Export]
 	public Camera2D Camera2D { get; set; }
+
+	[Export]
+	public ProgressBar ProgressBar { get; set; }
+
+	[Export]
+	public Area2D AttackArea { get; set; }
 
 	[Export]
 	public int Speed = 400;
@@ -23,13 +36,26 @@ public partial class Player : CharacterBody2D
 	[Export]
 	public int JumpForce = 900;
 
+	[Export]
+	public int MaxHealth = 10;
+
+	[Export]
+	public int WeaponDamage = 5;
+
 	public override void _Ready()
 	{
 		AnimatedSprite2D.AnimationFinished += OnAnimationFinished;
+
+		_currentHealth = MaxHealth;
+		ProgressBar.Value = _currentHealth;
+
+		AttackArea.BodyEntered += OnAttackAreaBodyEntered;
+		AttackArea.BodyExited += OnAttackAreaBodyExited;
 	}
 
 	public override void _Process(double delta)
 	{
+		AttackEnemy();
 		FlipHorizontally();
 		PlayAnimation();
 	}
@@ -37,6 +63,11 @@ public partial class Player : CharacterBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_currentState == PlayerState.Attack)
+		{
+			return;
+		}
+
+		if (_currentState == PlayerState.Dead)
 		{
 			return;
 		}
@@ -75,7 +106,7 @@ public partial class Player : CharacterBody2D
 		else
 		{
 			_velocity.Y += Gravity * (float)delta;
-			
+
 			if (_velocity.Y != 0)
 			{
 				_currentState = PlayerState.Jump;
@@ -89,6 +120,27 @@ public partial class Player : CharacterBody2D
 		this.MoveAndSlide();
 	}
 
+	public void TakeDamage(int damage)
+	{
+		if (_currentHealth > 0)
+		{
+			_currentHealth -= damage;
+			ProgressBar.Value = _currentHealth;
+
+			if (_currentHealth <= 0)
+			{
+				_currentState = PlayerState.Dead;
+				CollisionShape2D.Disabled = true;
+				GD.Print("Player is dead!");
+			}
+		}
+	}
+
+	public bool IsDead()
+	{
+		return _currentState == PlayerState.Dead;
+	}
+
 	private void FlipHorizontally()
 	{
 		if (_direction == 0)
@@ -96,14 +148,14 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		if (_velocity.X < 0 && _direction == 1)
-			{
-				_direction = -1;
-			}
-			else if (_velocity.X > 0 && _direction == -1)
-			{
-				_direction = 1;
-			}
+		if (_direction < 0)
+		{
+			AttackArea.RotationDegrees = 180;
+		}
+		else
+		{
+			AttackArea.RotationDegrees = 0;
+		}
 
 		AnimatedSprite2D.FlipH = _direction == -1;
 	}
@@ -146,6 +198,32 @@ public partial class Player : CharacterBody2D
 		if (_currentState == PlayerState.Attack)
 		{
 			_currentState = PlayerState.Idle;
+		}
+	}
+
+	private void OnAttackAreaBodyEntered(Node body)
+	{
+		if (body is Enemy enemy)
+		{
+			GD.Print("ENEMY SPOTED");
+			_enemy = enemy;
+		}
+	}
+
+	private void OnAttackAreaBodyExited(Node body)
+	{
+		if (body is Enemy)
+		{
+			GD.Print("ENEMY LOST");
+			_enemy = null;
+		}
+	}
+
+	private void AttackEnemy()
+	{
+		if (_currentState == PlayerState.Attack && _enemy != null)
+		{
+			_enemy.TakeDamage(WeaponDamage);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://d080n0yfmi8et"]
+[gd_scene load_steps=57 format=3 uid="uid://d080n0yfmi8et"]
 
 [ext_resource type="Script" uid="uid://bixh4xcj48hvg" path="res://Scripts/Player.cs" id="1_6t5aa"]
 [ext_resource type="Texture2D" uid="uid://orah5i3u3epq" path="res://Assets/Tiles/Character/ATTACK 3.png" id="2_3smsa"]
@@ -337,22 +337,76 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3smsa"]
 radius = 9.6
-height = 35.2
+height = 33.6
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "Camera2D")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3smsa"]
+bg_color = Color(0.124083, 0.124083, 0.124083, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8erm5"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3smsa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gymyn"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pu2lt"]
+bg_color = Color(0, 0, 1, 1)
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "CollisionShape2D", "Camera2D", "ProgressBar", "AttackArea")]
 texture_filter = 1
 scale = Vector2(5, 5)
 script = ExtResource("1_6t5aa")
 AnimatedSprite2D = NodePath("AnimatedSprite2D")
+CollisionShape2D = NodePath("CollisionShape2D")
 Camera2D = NodePath("Camera2D")
+ProgressBar = NodePath("ProgressBar")
+AttackArea = NodePath("Area2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(10, -20)
+position = Vector2(9.53674e-07, -1.90735e-06)
 sprite_frames = SubResource("SpriteFrames_5x828")
-animation = &"idle"
+animation = &"attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(11.2, -17.6)
+position = Vector2(5.68434e-14, 3.2)
 shape = SubResource("CapsuleShape2D_3smsa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -11.2
+offset_top = -22.4
+offset_right = -7.2
+offset_bottom = 0.100004
+grow_horizontal = 2
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_3smsa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_8erm5")
+max_value = 10.0
+step = 1.0
+value = 10.0
+fill_mode = 2
+show_percentage = false
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(20, 0)
+shape = SubResource("CircleShape2D_3smsa")
+
+[node name="ProgressBar" type="ProgressBar" parent="Area2D/CollisionShape2D"]
+offset_left = -2.4
+offset_top = 1.6
+offset_right = 1.6
+offset_bottom = 5.6
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_gymyn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pu2lt")
+max_value = 10.0
+value = 10.0
+fill_mode = 2
+show_percentage = false

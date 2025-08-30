@@ -7,18 +7,17 @@ public abstract partial class Enemy : CharacterBody2D
 {
     private float _direction = -1;
     private RayCast2D _currentRayCast2D => _direction == -1 ? RayCastLeft : RayCastRight;
-    private EnemyState _currentState = EnemyState.Walk;
-    private EnemyState _lastState = EnemyState.Idle;
-	private Player _player = null;
-
-    [Export]
-    public int Speed = 100;
-
-    [Export]
-    public int Gravity = 2000;
+    protected EnemyState _currentState = EnemyState.Walk;
+    protected EnemyState _lastState = EnemyState.Idle;
+	protected Player _player = null;
+	protected bool _damageApplied = false;
+	private int _currentHealth = 0;
 
     [Export]
     public AnimatedSprite2D AnimatedSprite2D { get; set; }
+
+	[Export]
+	public CollisionShape2D CollisionShape2D { get; set; }
 
     [Export]
     public RayCast2D RayCastLeft { get; set; }
@@ -28,24 +27,48 @@ public abstract partial class Enemy : CharacterBody2D
 
     [Export]
     public Area2D AttackArea { get; set; }
-    
-    public override void _Ready()
+
+	[Export]
+	public ProgressBar ProgressBar { get; set; }
+
+	[Export]
+    public int Speed = 100;
+
+    [Export]
+    public int Gravity = 2000;
+
+	public abstract int MaxHealth { get; set; }
+
+	public override void _Ready()
 	{
 		AnimatedSprite2D.AnimationFinished += OnAnimationFinished;
 
 		AttackArea.BodyEntered += OnAttackAreaBodyEntered;
 		AttackArea.BodyExited += OnAttackAreaBodyExited;
 
+		_currentHealth = MaxHealth;
+		// ProgressBar.Value = _currentHealth;
 	}
 
 	public override void _Process(double delta)
 	{
 		PlayAnimation();
+		AttackPlayer();
 		UpdateFlipH();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (_currentState == EnemyState.Dead)
+		{
+			return;
+		}
+
+		if (_currentState == EnemyState.Attack && _player != null && _player.IsDead())
+		{
+			_currentState = EnemyState.Idle;
+		}
+
 		if (_currentState == EnemyState.Attack)
 		{
 			Velocity = Vector2.Zero;
@@ -68,7 +91,32 @@ public abstract partial class Enemy : CharacterBody2D
 
 		MoveAndSlide();
 		CheckEdge();
+		
+		if (_currentState == EnemyState.Dead)
+		{
+			QueueFree();
+		}
 	}
+
+	public void TakeDamage(int damage)
+	{
+		GD.Print("Enemy is taking damage!");
+		
+		if (_currentHealth > 0)
+		{
+			_currentHealth -= damage;
+			// ProgressBar.Value = _currentHealth;
+
+			if (_currentHealth <= 0)
+			{
+				_currentState = EnemyState.Dead;
+				CollisionShape2D.Disabled = true;
+				GD.Print("Enemy is dead!");
+			}
+		}
+	}
+
+	public abstract void AttackPlayer();
 
 	private void UpdateFlipH()
 	{
@@ -97,7 +145,7 @@ public abstract partial class Enemy : CharacterBody2D
 			_player = player;
 		}
 
-		if (_player != null && _currentState != EnemyState.Attack)
+		if (_player != null && !_player.IsDead() && _currentState != EnemyState.Attack)
 		{
 			_currentState = EnemyState.Attack;
 		}
