@@ -7,9 +7,10 @@ public abstract partial class Enemy : CharacterBody2D
 {
     private float _direction = -1;
     private RayCast2D _currentRayCast2D => _direction == -1 ? RayCastLeft : RayCastRight;
-    private EnemyState _currentState = EnemyState.Walk;
-    private EnemyState _lastState = EnemyState.Idle;
-	private Player _player = null;
+    protected EnemyState _currentState = EnemyState.Walk;
+    protected EnemyState _lastState = EnemyState.Idle;
+	protected Player _player = null;
+	protected bool _damageApplied = false;
 
     [Export]
     public int Speed = 100;
@@ -41,11 +42,17 @@ public abstract partial class Enemy : CharacterBody2D
 	public override void _Process(double delta)
 	{
 		PlayAnimation();
+		AttackPlayer();
 		UpdateFlipH();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (_currentState == EnemyState.Attack && _player != null && _player.IsDead())
+		{
+			_currentState = EnemyState.Idle;
+		}
+		
 		if (_currentState == EnemyState.Attack)
 		{
 			Velocity = Vector2.Zero;
@@ -69,6 +76,8 @@ public abstract partial class Enemy : CharacterBody2D
 		MoveAndSlide();
 		CheckEdge();
 	}
+
+	public abstract void AttackPlayer();
 
 	private void UpdateFlipH()
 	{
@@ -97,7 +106,7 @@ public abstract partial class Enemy : CharacterBody2D
 			_player = player;
 		}
 
-		if (_player != null && _currentState != EnemyState.Attack)
+		if (_player != null && !_player.IsDead() && _currentState != EnemyState.Attack)
 		{
 			_currentState = EnemyState.Attack;
 		}

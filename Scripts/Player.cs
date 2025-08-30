@@ -7,12 +7,19 @@ public partial class Player : CharacterBody2D
 	private PlayerState _currentState = PlayerState.Idle;
 	private PlayerState _lastState = PlayerState.Jump;
 	private float _direction = 1;
+	private int _currentHealth = 0;
 
 	[Export]
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
 
 	[Export]
+	public CollisionShape2D CollisionShape2D { get; set; }
+
+	[Export]
 	public Camera2D Camera2D { get; set; }
+
+	[Export]
+	public ProgressBar ProgressBar { get; set; }
 
 	[Export]
 	public int Speed = 400;
@@ -23,9 +30,15 @@ public partial class Player : CharacterBody2D
 	[Export]
 	public int JumpForce = 900;
 
+	[Export]
+	public int MaxHealth = 10;
+
 	public override void _Ready()
 	{
 		AnimatedSprite2D.AnimationFinished += OnAnimationFinished;
+
+		_currentHealth = MaxHealth;
+		ProgressBar.Value = _currentHealth;
 	}
 
 	public override void _Process(double delta)
@@ -41,8 +54,13 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
+		if (_currentState == PlayerState.Dead)
+		{
+			return;
+		}
+
 		// Движение влево/вправо
-		_direction = Input.GetActionStrength("action_right") - Input.GetActionStrength("action_left");
+			_direction = Input.GetActionStrength("action_right") - Input.GetActionStrength("action_left");
 		_velocity.X = _direction * Speed;
 
 		if (this.IsOnFloor())
@@ -89,6 +107,27 @@ public partial class Player : CharacterBody2D
 		this.MoveAndSlide();
 	}
 
+	public void TakeDamage(int damage)
+	{
+		if (_currentHealth > 0)
+		{
+			_currentHealth -= damage;
+			ProgressBar.Value = _currentHealth;
+
+			if (_currentHealth <= 0)
+			{
+				_currentState = PlayerState.Dead;
+				CollisionShape2D.Disabled = true;
+				GD.Print("Player is dead!");
+			}
+		}
+	}
+
+	public bool IsDead()
+	{
+		return _currentState == PlayerState.Dead;
+	}
+
 	private void FlipHorizontally()
 	{
 		if (_direction == 0)
@@ -97,13 +136,13 @@ public partial class Player : CharacterBody2D
 		}
 
 		if (_velocity.X < 0 && _direction == 1)
-			{
-				_direction = -1;
-			}
-			else if (_velocity.X > 0 && _direction == -1)
-			{
-				_direction = 1;
-			}
+		{
+			_direction = -1;
+		}
+		else if (_velocity.X > 0 && _direction == -1)
+		{
+			_direction = 1;
+		}
 
 		AnimatedSprite2D.FlipH = _direction == -1;
 	}

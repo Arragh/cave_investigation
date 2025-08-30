@@ -355,6 +355,7 @@ height = 32.0
 texture_filter = 1
 scale = Vector2(5, 5)
 script = ExtResource("1_81u3t")
+Damage = 2
 AnimatedSprite2D = NodePath("AnimatedSprite2D")
 RayCastLeft = NodePath("RayCast2D2Left")
 RayCastRight = NodePath("RayCast2DRight")
@@ -363,7 +364,7 @@ AttackArea = NodePath("Area2D")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(22, -16)
 sprite_frames = SubResource("SpriteFrames_n7qbd")
-animation = &"dead"
+animation = &"attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(22, -16)
@@ -385,5 +386,4 @@ shape = SubResource("CircleShape2D_81u3t")
 
 [node name="AttackAreaLeft" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(2, -16)
-scale = Vector2(1, 1)
 shape = SubResource("CircleShape2D_81u3t")

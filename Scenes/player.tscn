@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://d080n0yfmi8et"]
+[gd_scene load_steps=54 format=3 uid="uid://d080n0yfmi8et"]
 
 [ext_resource type="Script" uid="uid://bixh4xcj48hvg" path="res://Scripts/Player.cs" id="1_6t5aa"]
 [ext_resource type="Texture2D" uid="uid://orah5i3u3epq" path="res://Assets/Tiles/Character/ATTACK 3.png" id="2_3smsa"]
@@ -339,12 +339,20 @@ animations = [{
 radius = 9.6
 height = 35.2
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "Camera2D")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3smsa"]
+bg_color = Color(0.124083, 0.124083, 0.124083, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8erm5"]
+bg_color = Color(1, 0, 0, 1)
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "CollisionShape2D", "Camera2D", "ProgressBar")]
 texture_filter = 1
 scale = Vector2(5, 5)
 script = ExtResource("1_6t5aa")
 AnimatedSprite2D = NodePath("AnimatedSprite2D")
+CollisionShape2D = NodePath("CollisionShape2D")
 Camera2D = NodePath("Camera2D")
+ProgressBar = NodePath("ProgressBar")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(10, -20)
@@ -356,3 +364,20 @@ position = Vector2(11.2, -17.6)
 shape = SubResource("CapsuleShape2D_3smsa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = -46.4
+offset_right = 4.0
+offset_bottom = -23.9
+grow_horizontal = 2
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_3smsa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_8erm5")
+max_value = 10.0
+step = 1.0
+value = 10.0
+fill_mode = 2
+show_percentage = false
