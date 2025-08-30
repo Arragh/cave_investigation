@@ -7,6 +7,9 @@ public partial class Skeleton : Enemy
     [Export]
     public int Damage = 4;
 
+    [Export]
+    public override int MaxHealth { get; set; } = 4;
+
     public override void AttackPlayer()
     {
         if (_currentState == EnemyState.Attack)

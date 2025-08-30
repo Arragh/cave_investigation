@@ -11,15 +11,13 @@ public abstract partial class Enemy : CharacterBody2D
     protected EnemyState _lastState = EnemyState.Idle;
 	protected Player _player = null;
 	protected bool _damageApplied = false;
-
-    [Export]
-    public int Speed = 100;
-
-    [Export]
-    public int Gravity = 2000;
+	private int _currentHealth = 0;
 
     [Export]
     public AnimatedSprite2D AnimatedSprite2D { get; set; }
+
+	[Export]
+	public CollisionShape2D CollisionShape2D { get; set; }
 
     [Export]
     public RayCast2D RayCastLeft { get; set; }
@@ -29,14 +27,27 @@ public abstract partial class Enemy : CharacterBody2D
 
     [Export]
     public Area2D AttackArea { get; set; }
-    
-    public override void _Ready()
+
+	[Export]
+	public ProgressBar ProgressBar { get; set; }
+
+	[Export]
+    public int Speed = 100;
+
+    [Export]
+    public int Gravity = 2000;
+
+	public abstract int MaxHealth { get; set; }
+
+	public override void _Ready()
 	{
 		AnimatedSprite2D.AnimationFinished += OnAnimationFinished;
 
 		AttackArea.BodyEntered += OnAttackAreaBodyEntered;
 		AttackArea.BodyExited += OnAttackAreaBodyExited;
 
+		_currentHealth = MaxHealth;
+		// ProgressBar.Value = _currentHealth;
 	}
 
 	public override void _Process(double delta)
@@ -48,6 +59,11 @@ public abstract partial class Enemy : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (_currentState == EnemyState.Dead)
+		{
+			return;
+		}
+
 		if (_currentState == EnemyState.Attack && _player != null && _player.IsDead())
 		{
 			_currentState = EnemyState.Idle;
@@ -75,6 +91,24 @@ public abstract partial class Enemy : CharacterBody2D
 
 		MoveAndSlide();
 		CheckEdge();
+	}
+
+	public void TakeDamage(int damage)
+	{
+		GD.Print("Enemy is taking damage!");
+		
+		if (_currentHealth > 0)
+		{
+			_currentHealth -= damage;
+			// ProgressBar.Value = _currentHealth;
+
+			if (_currentHealth <= 0)
+			{
+				_currentState = EnemyState.Dead;
+				CollisionShape2D.Disabled = true;
+				GD.Print("Enemy is dead!");
+			}
+		}
 	}
 
 	public abstract void AttackPlayer();

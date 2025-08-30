@@ -1,3 +1,4 @@
+using Cave_investigation.Abstracts;
 using Cave_investigation.Enums;
 using Godot;
 
@@ -8,6 +9,7 @@ public partial class Player : CharacterBody2D
 	private PlayerState _lastState = PlayerState.Jump;
 	private float _direction = 1;
 	private int _currentHealth = 0;
+	private Enemy _enemy = null;
 
 	[Export]
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
@@ -22,6 +24,9 @@ public partial class Player : CharacterBody2D
 	public ProgressBar ProgressBar { get; set; }
 
 	[Export]
+	public Area2D AttackArea { get; set; }
+
+	[Export]
 	public int Speed = 400;
 
 	[Export]
@@ -33,16 +38,23 @@ public partial class Player : CharacterBody2D
 	[Export]
 	public int MaxHealth = 10;
 
+	[Export]
+	public int WeaponDamage = 5;
+
 	public override void _Ready()
 	{
 		AnimatedSprite2D.AnimationFinished += OnAnimationFinished;
 
 		_currentHealth = MaxHealth;
 		ProgressBar.Value = _currentHealth;
+
+		AttackArea.BodyEntered += OnAttackAreaBodyEntered;
+		AttackArea.BodyExited += OnAttackAreaBodyExited;
 	}
 
 	public override void _Process(double delta)
 	{
+		AttackEnemy();
 		FlipHorizontally();
 		PlayAnimation();
 	}
@@ -60,7 +72,7 @@ public partial class Player : CharacterBody2D
 		}
 
 		// Движение влево/вправо
-			_direction = Input.GetActionStrength("action_right") - Input.GetActionStrength("action_left");
+		_direction = Input.GetActionStrength("action_right") - Input.GetActionStrength("action_left");
 		_velocity.X = _direction * Speed;
 
 		if (this.IsOnFloor())
@@ -93,7 +105,7 @@ public partial class Player : CharacterBody2D
 		else
 		{
 			_velocity.Y += Gravity * (float)delta;
-			
+
 			if (_velocity.Y != 0)
 			{
 				_currentState = PlayerState.Jump;
@@ -185,6 +197,30 @@ public partial class Player : CharacterBody2D
 		if (_currentState == PlayerState.Attack)
 		{
 			_currentState = PlayerState.Idle;
+		}
+	}
+
+	private void OnAttackAreaBodyEntered(Node body)
+	{
+		if (body is Enemy enemy)
+		{
+			_enemy = enemy;
+		}
+	}
+
+	private void OnAttackAreaBodyExited(Node body)
+	{
+		if (body is Enemy)
+		{
+			_enemy = null;
+		}
+	}
+
+	private void AttackEnemy()
+	{
+		if (_currentState == PlayerState.Attack && _enemy != null)
+		{
+			_enemy.TakeDamage(WeaponDamage);
 		}
 	}
 }

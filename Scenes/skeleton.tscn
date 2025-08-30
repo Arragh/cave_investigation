@@ -351,39 +351,39 @@ height = 32.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_81u3t"]
 
-[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "RayCastLeft", "RayCastRight", "AttackArea")]
+[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "CollisionShape2D", "RayCastLeft", "RayCastRight", "AttackArea")]
 texture_filter = 1
 scale = Vector2(5, 5)
 script = ExtResource("1_81u3t")
 Damage = 2
+MaxHealth = 10
 AnimatedSprite2D = NodePath("AnimatedSprite2D")
+CollisionShape2D = NodePath("CollisionShape2D")
 RayCastLeft = NodePath("RayCast2D2Left")
 RayCastRight = NodePath("RayCast2DRight")
 AttackArea = NodePath("Area2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(22, -16)
 sprite_frames = SubResource("SpriteFrames_n7qbd")
 animation = &"attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(22, -16)
 shape = SubResource("CapsuleShape2D_sfdtf")
 
 [node name="RayCast2DRight" type="RayCast2D" parent="."]
-position = Vector2(22, -16)
+position = Vector2(1.90735e-06, -9.53674e-07)
 target_position = Vector2(16, 32)
 
 [node name="RayCast2D2Left" type="RayCast2D" parent="."]
-position = Vector2(22, -16)
+position = Vector2(1.90735e-06, -9.53674e-07)
 target_position = Vector2(-16, 32)
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="AttackAreaRight" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(42, -16)
+position = Vector2(19.2, -9.53674e-07)
 shape = SubResource("CircleShape2D_81u3t")
 
 [node name="AttackAreaLeft" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(2, -16)
+position = Vector2(-19.2, 1.19209e-07)
 shape = SubResource("CircleShape2D_81u3t")
