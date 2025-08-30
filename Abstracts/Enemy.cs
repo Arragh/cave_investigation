@@ -68,7 +68,7 @@ public abstract partial class Enemy : CharacterBody2D
 		{
 			_currentState = EnemyState.Idle;
 		}
-		
+
 		if (_currentState == EnemyState.Attack)
 		{
 			Velocity = Vector2.Zero;
@@ -91,6 +91,11 @@ public abstract partial class Enemy : CharacterBody2D
 
 		MoveAndSlide();
 		CheckEdge();
+		
+		if (_currentState == EnemyState.Dead)
+		{
+			QueueFree();
+		}
 	}
 
 	public void TakeDamage(int damage)

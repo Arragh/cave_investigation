@@ -8,6 +8,7 @@ public partial class Player : CharacterBody2D
 	private PlayerState _currentState = PlayerState.Idle;
 	private PlayerState _lastState = PlayerState.Jump;
 	private float _direction = 1;
+	private float _lastDirection = 1;
 	private int _currentHealth = 0;
 	private Enemy _enemy = null;
 
@@ -147,6 +148,15 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
+		if (_direction < 0)
+		{
+			AttackArea.RotationDegrees = 180;
+		}
+		else
+		{
+			AttackArea.RotationDegrees = 0;
+		}
+
 		AnimatedSprite2D.FlipH = _direction == -1;
 	}
 
@@ -195,6 +205,7 @@ public partial class Player : CharacterBody2D
 	{
 		if (body is Enemy enemy)
 		{
+			GD.Print("ENEMY SPOTED");
 			_enemy = enemy;
 		}
 	}
@@ -203,6 +214,7 @@ public partial class Player : CharacterBody2D
 	{
 		if (body is Enemy)
 		{
+			GD.Print("ENEMY LOST");
 			_enemy = null;
 		}
 	}

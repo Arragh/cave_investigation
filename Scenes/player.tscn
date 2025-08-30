@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://d080n0yfmi8et"]
+[gd_scene load_steps=57 format=3 uid="uid://d080n0yfmi8et"]
 
 [ext_resource type="Script" uid="uid://bixh4xcj48hvg" path="res://Scripts/Player.cs" id="1_6t5aa"]
 [ext_resource type="Texture2D" uid="uid://orah5i3u3epq" path="res://Assets/Tiles/Character/ATTACK 3.png" id="2_3smsa"]
@@ -347,6 +347,12 @@ bg_color = Color(1, 0, 0, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3smsa"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gymyn"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pu2lt"]
+bg_color = Color(0, 0, 1, 1)
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "CollisionShape2D", "Camera2D", "ProgressBar", "AttackArea")]
 texture_filter = 1
 scale = Vector2(5, 5)
@@ -391,3 +397,16 @@ show_percentage = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(20, 0)
 shape = SubResource("CircleShape2D_3smsa")
+
+[node name="ProgressBar" type="ProgressBar" parent="Area2D/CollisionShape2D"]
+offset_left = -2.4
+offset_top = 1.6
+offset_right = 1.6
+offset_bottom = 5.6
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_gymyn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pu2lt")
+max_value = 10.0
+value = 10.0
+fill_mode = 2
+show_percentage = false
