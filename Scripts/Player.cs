@@ -147,15 +147,6 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		if (_velocity.X < 0 && _direction == 1)
-		{
-			_direction = -1;
-		}
-		else if (_velocity.X > 0 && _direction == -1)
-		{
-			_direction = 1;
-		}
-
 		AnimatedSprite2D.FlipH = _direction == -1;
 	}
 
