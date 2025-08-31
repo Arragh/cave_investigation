@@ -11,6 +11,7 @@ public partial class Player : CharacterBody2D
 	private float _lastDirection = 1;
 	private int _currentHealth = 0;
 	private Enemy _enemy = null;
+	private bool _damageApplied = false;
 
 	[Export]
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
@@ -37,7 +38,7 @@ public partial class Player : CharacterBody2D
 	public int JumpForce = 900;
 
 	[Export]
-	public int MaxHealth = 10;
+	public int MaxHealth { get; set; } = 10;
 
 	[Export]
 	public int WeaponDamage = 5;
@@ -47,6 +48,7 @@ public partial class Player : CharacterBody2D
 		AnimatedSprite2D.AnimationFinished += OnAnimationFinished;
 
 		_currentHealth = MaxHealth;
+		ProgressBar.MaxValue = MaxHealth;
 		ProgressBar.Value = _currentHealth;
 
 		AttackArea.BodyEntered += OnAttackAreaBodyEntered;
@@ -55,7 +57,6 @@ public partial class Player : CharacterBody2D
 
 	public override void _Process(double delta)
 	{
-		AttackEnemy();
 		FlipHorizontally();
 		PlayAnimation();
 	}
@@ -64,6 +65,7 @@ public partial class Player : CharacterBody2D
 	{
 		if (_currentState == PlayerState.Attack)
 		{
+			AttackEnemy();
 			return;
 		}
 
@@ -223,7 +225,18 @@ public partial class Player : CharacterBody2D
 	{
 		if (_currentState == PlayerState.Attack && _enemy != null)
 		{
-			_enemy.TakeDamage(WeaponDamage);
+			int frameCount = AnimatedSprite2D.SpriteFrames.GetFrameCount("attack");
+
+			if (AnimatedSprite2D.Frame == 2 && !_damageApplied)
+			{
+				_enemy.TakeDamage(WeaponDamage);
+				_damageApplied = true;
+			}
+
+			if (AnimatedSprite2D.Frame == 5 && AnimatedSprite2D.Frame == frameCount - 1)
+			{
+				_damageApplied = false;
+			}
 		}
 	}
 }

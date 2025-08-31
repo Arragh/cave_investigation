@@ -1,7 +1,13 @@
-[gd_scene load_steps=51 format=3 uid="uid://hjri31e1ot81"]
+[gd_scene load_steps=53 format=3 uid="uid://hjri31e1ot81"]
 
 [ext_resource type="Script" uid="uid://d3appjhwfqr2f" path="res://Scripts/Skeleton.cs" id="1_81u3t"]
 [ext_resource type="Texture2D" uid="uid://bncfx1fb1ngh6" path="res://Assets/Tiles/Skeleton/Skeleton.png" id="1_sfdtf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_81u3t"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vd5x3"]
+bg_color = Color(0.643139, 0.0893365, 1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_anwrq"]
 atlas = ExtResource("1_sfdtf")
@@ -269,7 +275,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_pspbd")
 }],
-"loop": true,
+"loop": false,
 "name": &"dead",
 "speed": 5.0
 }, {
@@ -351,17 +357,30 @@ height = 32.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_81u3t"]
 
-[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "CollisionShape2D", "RayCastLeft", "RayCastRight", "AttackArea")]
+[node name="Skeleton" type="CharacterBody2D" node_paths=PackedStringArray("AnimatedSprite2D", "CollisionShape2D", "RayCastLeft", "RayCastRight", "AttackArea", "ProgressBar")]
 texture_filter = 1
 scale = Vector2(5, 5)
 script = ExtResource("1_81u3t")
 Damage = 2
-MaxHealth = 10
+MaxHealth = 20
 AnimatedSprite2D = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
 RayCastLeft = NodePath("RayCast2D2Left")
 RayCastRight = NodePath("RayCast2DRight")
 AttackArea = NodePath("Area2D")
+ProgressBar = NodePath("ProgressBar")
+metadata/_edit_group_ = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -12.8
+offset_top = -20.8
+offset_right = -8.8
+offset_bottom = 1.7
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_81u3t")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vd5x3")
+fill_mode = 2
+show_percentage = false
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_n7qbd")

@@ -47,13 +47,13 @@ public abstract partial class Enemy : CharacterBody2D
 		AttackArea.BodyExited += OnAttackAreaBodyExited;
 
 		_currentHealth = MaxHealth;
-		// ProgressBar.Value = _currentHealth;
+		ProgressBar.Value = _currentHealth;
+		ProgressBar.MaxValue = MaxHealth;
 	}
 
 	public override void _Process(double delta)
 	{
 		PlayAnimation();
-		AttackPlayer();
 		UpdateFlipH();
 	}
 
@@ -71,9 +71,7 @@ public abstract partial class Enemy : CharacterBody2D
 
 		if (_currentState == EnemyState.Attack)
 		{
-			Velocity = Vector2.Zero;
-			MoveAndSlide();
-
+			AttackPlayer();
 			return;
 		}
 
@@ -100,17 +98,19 @@ public abstract partial class Enemy : CharacterBody2D
 
 	public void TakeDamage(int damage)
 	{
-		GD.Print("Enemy is taking damage!");
+		GD.Print($"Enemy is taking damage: {damage}");
 		
 		if (_currentHealth > 0)
 		{
 			_currentHealth -= damage;
-			// ProgressBar.Value = _currentHealth;
+			ProgressBar.Value = _currentHealth;
 
 			if (_currentHealth <= 0)
 			{
 				_currentState = EnemyState.Dead;
-				CollisionShape2D.Disabled = true;
+				CollisionLayer = 2;
+				CollisionMask = 2;
+				ProgressBar.Visible = false;
 				GD.Print("Enemy is dead!");
 			}
 		}
@@ -140,6 +140,11 @@ public abstract partial class Enemy : CharacterBody2D
 
 	private void OnAttackAreaBodyEntered(Node body)
 	{
+		if (_currentState == EnemyState.Dead)
+		{
+			return;
+		}
+
 		if (body is Player player)
 		{
 			_player = player;
@@ -153,6 +158,11 @@ public abstract partial class Enemy : CharacterBody2D
 
 	private void OnAttackAreaBodyExited(Node body)
 	{
+		if (_currentState == EnemyState.Dead)
+		{
+			return;
+		}
+
 		if (body is Player)
 		{
 			_player = null;
