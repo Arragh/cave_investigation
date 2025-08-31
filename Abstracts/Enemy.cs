@@ -37,6 +37,7 @@ public abstract partial class Enemy : CharacterBody2D
     [Export]
     public int Gravity = 2000;
 
+	public abstract int Damage { get; set; }
 	public abstract int MaxHealth { get; set; }
 
 	public override void _Ready()
