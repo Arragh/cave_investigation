@@ -13,19 +13,19 @@
 [node name="Main" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource("1_bo1nx")]
-position = Vector2(112, 696)
+position = Vector2(136, 1080)
 
 [node name="Skeleton1" parent="." instance=ExtResource("4_jjvhh")]
-position = Vector2(3560, 560)
+position = Vector2(3544, 936)
 
 [node name="Skeleton2" parent="." instance=ExtResource("4_jjvhh")]
-position = Vector2(1536, 560)
+position = Vector2(1544, 936)
 
 [node name="Skeleton3" parent="." instance=ExtResource("4_jjvhh")]
-position = Vector2(8528, 1064)
+position = Vector2(8528, 1128)
 
 [node name="Skeleton4" parent="." instance=ExtResource("4_jjvhh")]
-position = Vector2(5248, 400)
+position = Vector2(5240, 776)
 
 [node name="Platform_big_1" parent="." instance=ExtResource("2_8gbba")]
 position = Vector2(0, 1024)
