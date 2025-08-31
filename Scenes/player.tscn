@@ -8,6 +8,12 @@
 [ext_resource type="Texture2D" uid="uid://bf0qo8pmxpc0d" path="res://Assets/Tiles/Character/DEATH.png" id="6_gymyn"]
 [ext_resource type="Texture2D" uid="uid://cd5ffb2x7f2or" path="res://Assets/Tiles/Character/HURT.png" id="7_pu2lt"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3smsa"]
+bg_color = Color(0.124083, 0.124083, 0.124083, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8erm5"]
+bg_color = Color(1, 0, 0, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_3smsa"]
 atlas = ExtResource("2_3smsa")
 region = Rect2(0, 0, 96, 84)
@@ -339,12 +345,6 @@ animations = [{
 radius = 9.6
 height = 33.6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3smsa"]
-bg_color = Color(0.124083, 0.124083, 0.124083, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8erm5"]
-bg_color = Color(1, 0, 0, 1)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_3smsa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gymyn"]
@@ -362,6 +362,23 @@ CollisionShape2D = NodePath("CollisionShape2D")
 Camera2D = NodePath("Camera2D")
 ProgressBar = NodePath("ProgressBar")
 AttackArea = NodePath("Area2D")
+MaxHealth = 20
+metadata/_edit_group_ = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -11.2
+offset_top = -22.4
+offset_right = -7.2
+offset_bottom = 0.100006
+grow_horizontal = 2
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_3smsa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_8erm5")
+fill_mode = 2
+show_percentage = false
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(9.53674e-07, -1.90735e-06)
@@ -373,24 +390,6 @@ position = Vector2(5.68434e-14, 3.2)
 shape = SubResource("CapsuleShape2D_3smsa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-
-[node name="ProgressBar" type="ProgressBar" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -11.2
-offset_top = -22.4
-offset_right = -7.2
-offset_bottom = 0.100004
-grow_horizontal = 2
-rotation = -1.5708
-theme_override_styles/background = SubResource("StyleBoxFlat_3smsa")
-theme_override_styles/fill = SubResource("StyleBoxFlat_8erm5")
-max_value = 10.0
-step = 1.0
-value = 10.0
-fill_mode = 2
-show_percentage = false
 
 [node name="Area2D" type="Area2D" parent="."]
 
