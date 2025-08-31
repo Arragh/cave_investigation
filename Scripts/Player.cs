@@ -63,63 +63,53 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (_currentState == PlayerState.Attack)
-		{
-			AttackEnemy();
-			return;
-		}
-
 		if (_currentState == PlayerState.Dead)
 		{
 			return;
 		}
 
-		// Движение влево/вправо
-		_direction = Input.GetActionStrength("action_right") - Input.GetActionStrength("action_left");
-		_velocity.X = _direction * Speed;
-
-		if (this.IsOnFloor())
+		if (_currentState == PlayerState.Jump)
 		{
-			if (_velocity.Y > 0)
-			{
-				_velocity.Y = 0;
-			}
+			Jump();
+		}
 
-			// Прыжок
-			if (Input.IsActionJustPressed("action_jump"))
+		if (_currentState == PlayerState.Attack)
+		{
+			AttackEnemy();
+		}
+
+		if (_currentState != PlayerState.Attack)
+		{
+			_direction = Input.GetActionStrength("action_right") - Input.GetActionStrength("action_left");
+			_velocity.X = _direction * Speed;
+
+			if (this.IsOnFloor())
 			{
-				_velocity.Y = -JumpForce;
-				_currentState = PlayerState.Jump;
-			}
-			else if (Input.IsActionJustPressed("action_attack"))
-			{
-				_velocity.X = 0;
-				_currentState = PlayerState.Attack;
-			}
-			else if (_velocity.X != 0)
-			{
-				_currentState = PlayerState.Run;
+				if (Input.IsActionJustPressed("action_jump") && _currentState != PlayerState.Jump)
+				{
+					_currentState = PlayerState.Jump;
+				}
+				else if (Input.IsActionJustPressed("action_attack") && _currentState != PlayerState.Attack)
+				{
+					_currentState = PlayerState.Attack;
+				}
+				else if (_velocity.X != 0)
+				{
+					_currentState = PlayerState.Run;
+				}
+				else
+				{
+					_currentState = PlayerState.Idle;
+				}
 			}
 			else
 			{
-				_currentState = PlayerState.Idle;
-			}
-		}
-		else
-		{
-			_velocity.Y += Gravity * (float)delta;
-
-			if (_velocity.Y != 0)
-			{
-				_currentState = PlayerState.Jump;
+				_velocity.Y += Gravity * (float)delta;
 			}
 		}
 
-		// Записываем обновлённую скорость
-		this.Velocity = _velocity;
-
-		// Двигаем тело (без этого коллизий не будет!)
-		this.MoveAndSlide();
+		Velocity = _velocity;
+		MoveAndSlide();
 	}
 
 	public void TakeDamage(int damage)
@@ -135,6 +125,16 @@ public partial class Player : CharacterBody2D
 				CollisionShape2D.Disabled = true;
 				GD.Print("Player is dead!");
 			}
+		}
+	}
+
+	public void Die()
+	{
+		if (_currentState != PlayerState.Dead)
+		{
+			_currentState = PlayerState.Dead;
+			CollisionShape2D.Disabled = true;
+			GD.Print("Player is dead!");
 		}
 	}
 
@@ -200,6 +200,13 @@ public partial class Player : CharacterBody2D
 		if (_currentState == PlayerState.Attack)
 		{
 			_currentState = PlayerState.Idle;
+			_damageApplied = false;
+		}
+
+		if (_currentState == PlayerState.Jump)
+		{
+			_velocity.Y = 0;
+			_currentState = PlayerState.Idle;
 		}
 	}
 
@@ -223,20 +230,22 @@ public partial class Player : CharacterBody2D
 
 	private void AttackEnemy()
 	{
+		_velocity.X = 0;
+
 		if (_currentState == PlayerState.Attack && _enemy != null)
 		{
 			int frameCount = AnimatedSprite2D.SpriteFrames.GetFrameCount("attack");
 
-			if (AnimatedSprite2D.Frame == 2 && !_damageApplied)
+			if (AnimatedSprite2D.Frame >= 2 && !_damageApplied)
 			{
 				_enemy.TakeDamage(WeaponDamage);
 				_damageApplied = true;
 			}
-
-			if (AnimatedSprite2D.Frame == 5 && AnimatedSprite2D.Frame == frameCount - 1)
-			{
-				_damageApplied = false;
-			}
 		}
+	}
+
+	private void Jump()
+	{
+		_velocity.Y = -JumpForce;
 	}
 }

@@ -369,7 +369,6 @@ RayCastLeft = NodePath("RayCast2D2Left")
 RayCastRight = NodePath("RayCast2DRight")
 AttackArea = NodePath("Area2D")
 ProgressBar = NodePath("ProgressBar")
-metadata/_edit_group_ = true
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 offset_left = -12.8

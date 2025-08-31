@@ -1,11 +1,10 @@
 using Cave_investigation.Abstracts;
-using Cave_investigation.Enums;
 using Godot;
 
 public partial class Skeleton : Enemy
 {
     [Export]
-    public int Damage = 4;
+    public override int Damage { get; set; } = 4;
 
     [Export]
     public override int MaxHealth { get; set; } = 8;
