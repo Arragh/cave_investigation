@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://k8y0lp75rto"]
+
+[ext_resource type="Script" uid="uid://bkshidr6ofdmi" path="res://Scripts/Background.cs" id="1_pojwb"]
+[ext_resource type="Texture2D" uid="uid://dkutxkub6dqjg" path="res://Assets/Tiles/Cave/ParallaxCave1.png" id="1_sn1xx"]
+[ext_resource type="Texture2D" uid="uid://de8giu6b6a4fl" path="res://Assets/Tiles/Cave/ParallaxCave2.png" id="2_4aqey"]
+[ext_resource type="Texture2D" uid="uid://b85tu03cpudrr" path="res://Assets/Tiles/Cave/ParallaxCave4.png" id="2_ltlj5"]
+[ext_resource type="Texture2D" uid="uid://c1rhvmosc0kqy" path="res://Assets/Tiles/Cave/ParallaxCave3.png" id="3_rymcx"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" node_paths=PackedStringArray("ParallaxLayer1", "ParallaxLayer2", "ParallaxLayer3")]
+scale = Vector2(1.8, 1.8)
+transform = Transform2D(1.8, 0, 0, 1.8, 0, 0)
+script = ExtResource("1_pojwb")
+ParallaxLayer1 = NodePath("ParallaxLayer1")
+ParallaxLayer2 = NodePath("ParallaxLayer2")
+ParallaxLayer3 = NodePath("ParallaxLayer3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(576.111, 318.889)
+texture = ExtResource("2_ltlj5")
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer3"]
+position = Vector2(576.111, 287.222)
+texture = ExtResource("3_rymcx")
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer2"]
+position = Vector2(576.111, 287.222)
+texture = ExtResource("2_4aqey")
+
+[node name="ParallaxLayer1" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer1"]
+position = Vector2(575.882, 287.059)
+texture = ExtResource("1_sn1xx")

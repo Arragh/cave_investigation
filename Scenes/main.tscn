@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5rurb5ugd4dx"]
+[gd_scene load_steps=10 format=3 uid="uid://b5rurb5ugd4dx"]
 
 [ext_resource type="PackedScene" uid="uid://d080n0yfmi8et" path="res://Scenes/player.tscn" id="1_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://bsneyqkowppjt" path="res://Scenes/platform_big_1.tscn" id="2_8gbba"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b07n5nafsr7s1" path="res://Scenes/platform_big_3.tscn" id="6_21xkr"]
 [ext_resource type="PackedScene" uid="uid://cw4t8f85qiell" path="res://Scenes/wall.tscn" id="7_6bp64"]
 [ext_resource type="PackedScene" uid="uid://dhru1kvuoi6ml" path="res://Scenes/death_zone.tscn" id="8_344ge"]
+[ext_resource type="PackedScene" uid="uid://k8y0lp75rto" path="res://Scenes/background.tscn" id="9_ynf5e"]
 
 [node name="Main" type="Node"]
 
@@ -16,7 +17,6 @@ position = Vector2(112, 696)
 
 [node name="Skeleton1" parent="." instance=ExtResource("4_jjvhh")]
 position = Vector2(3560, 560)
-scale = Vector2(5, 5)
 
 [node name="Skeleton2" parent="." instance=ExtResource("4_jjvhh")]
 position = Vector2(1536, 560)
@@ -28,22 +28,24 @@ position = Vector2(8528, 1064)
 position = Vector2(5248, 400)
 
 [node name="Platform_big_1" parent="." instance=ExtResource("2_8gbba")]
-position = Vector2(0, 640)
+position = Vector2(0, 1024)
 
 [node name="platform_mid_1" parent="." instance=ExtResource("3_8gbba")]
-position = Vector2(2336, 640)
+position = Vector2(2336, 1024)
 
 [node name="platform_mid_1_2" parent="." instance=ExtResource("3_8gbba")]
-position = Vector2(3232, 640)
+position = Vector2(3232, 1024)
 
 [node name="StaticBody2D" parent="." instance=ExtResource("5_kry3j")]
-position = Vector2(4128, 480)
+position = Vector2(4128, 864)
 
 [node name="Platform_big_3" parent="." instance=ExtResource("6_21xkr")]
-position = Vector2(6912, 1152)
+position = Vector2(6912, 1216)
 
 [node name="Wall1" parent="." instance=ExtResource("7_6bp64")]
 position = Vector2(-160, 160)
 
 [node name="DeathZone" parent="." instance=ExtResource("8_344ge")]
 position = Vector2(0, 1664)
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("9_ynf5e")]
