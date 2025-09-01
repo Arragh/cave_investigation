@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b5rurb5ugd4dx"]
+[gd_scene load_steps=12 format=3 uid="uid://b5rurb5ugd4dx"]
 
 [ext_resource type="PackedScene" uid="uid://d080n0yfmi8et" path="res://Scenes/player.tscn" id="1_bvt00"]
 [ext_resource type="Script" uid="uid://c1v08yjq6tj5y" path="res://Scripts/Level.cs" id="1_oqgf2"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cw4t8f85qiell" path="res://Scenes/wall.tscn" id="7_c7le1"]
 [ext_resource type="PackedScene" uid="uid://dhru1kvuoi6ml" path="res://Scenes/death_zone.tscn" id="8_2klc5"]
 [ext_resource type="PackedScene" uid="uid://k8y0lp75rto" path="res://Scenes/background.tscn" id="9_nngtn"]
+[ext_resource type="PackedScene" uid="uid://bpgqbiyneunfp" path="res://Scenes/end_game_stone.tscn" id="11_qxfql"]
 
 [node name="Level" type="Node" node_paths=PackedStringArray("StartSpawnPoint")]
 script = ExtResource("1_oqgf2")
@@ -53,3 +54,6 @@ position = Vector2(0, 1664)
 
 [node name="PlayerSpawnPoint" type="Marker2D" parent="."]
 position = Vector2(128, 1088)
+
+[node name="EndGameStone" parent="." instance=ExtResource("11_qxfql")]
+position = Vector2(8736, 824)
