@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Cave_Investigation"
-run/main_scene="uid://b5rurb5ugd4dx"
+run/main_scene="uid://ca1n4aowkivkc"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=2560
+window/size/viewport_width=2070
 window/size/viewport_height=1440
 window/size/initial_position=Vector2i(50, 50)
 
