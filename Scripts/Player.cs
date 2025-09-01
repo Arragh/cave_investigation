@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Cave_investigation.Abstracts;
 using Cave_investigation.Enums;
 using Godot;
@@ -12,8 +10,6 @@ public partial class Player : CharacterBody2D
 	private float _direction = 1;
 	private float _lastDirection = 1;
 	private int _currentHealth = 0;
-	private Enemy _enemy = null;
-	private bool _damageApplied = false;
 
 	[Export]
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
@@ -55,6 +51,7 @@ public partial class Player : CharacterBody2D
 
 		AttackArea.BodyEntered += OnAttackAreaBodyEntered;
 		AttackArea.BodyExited += OnAttackAreaBodyExited;
+		AttackArea.Monitoring = false;
 	}
 
 	public override void _Process(double delta)
@@ -137,9 +134,7 @@ public partial class Player : CharacterBody2D
 		if (_currentState == PlayerState.Dead)
 		{
 			CollisionShape2D.Disabled = true;
-			GD.Print("Player is dead!");
 
-			// await Task.Delay(TimeSpan.FromSeconds(5));
 			await ToSignal(GetTree().CreateTimer(3), SceneTreeTimer.SignalName.Timeout);
 
 			var level = GD.Load<PackedScene>("res://Scenes/main_menu.tscn");
@@ -214,7 +209,6 @@ public partial class Player : CharacterBody2D
 		if (_currentState == PlayerState.Attack)
 		{
 			_currentState = PlayerState.Idle;
-			_damageApplied = false;
 		}
 
 		if (_currentState == PlayerState.Jump)
@@ -229,7 +223,7 @@ public partial class Player : CharacterBody2D
 		if (body is Enemy enemy)
 		{
 			GD.Print("ENEMY SPOTED");
-			_enemy = enemy;
+			enemy.TakeDamage(WeaponDamage);
 		}
 	}
 
@@ -238,23 +232,19 @@ public partial class Player : CharacterBody2D
 		if (body is Enemy)
 		{
 			GD.Print("ENEMY LOST");
-			_enemy = null;
 		}
 	}
 
-	private void AttackEnemy()
+	private async void AttackEnemy()
 	{
 		_velocity.X = 0;
 
-		if (_currentState == PlayerState.Attack && _enemy != null)
+		if (_currentState == PlayerState.Attack)
 		{
-			int frameCount = AnimatedSprite2D.SpriteFrames.GetFrameCount("attack");
-
-			if (AnimatedSprite2D.Frame >= 2 && !_damageApplied)
-			{
-				_enemy.TakeDamage(WeaponDamage);
-				_damageApplied = true;
-			}
+			await ToSignal(GetTree().CreateTimer(0.3), SceneTreeTimer.SignalName.Timeout);
+			AttackArea.Monitoring = true;
+			await ToSignal(GetTree().CreateTimer(0.25), SceneTreeTimer.SignalName.Timeout);
+			AttackArea.Monitoring = false;
 		}
 	}
 
