@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Cave_investigation.Abstracts;
 using Cave_investigation.Enums;
 using Godot;
@@ -59,6 +61,8 @@ public partial class Player : CharacterBody2D
 	{
 		FlipHorizontally();
 		PlayAnimation();
+
+		PlayerIsDead();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -128,14 +132,24 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	public void Die()
+	public async void PlayerIsDead()
 	{
-		if (_currentState != PlayerState.Dead)
+		if (_currentState == PlayerState.Dead)
 		{
-			_currentState = PlayerState.Dead;
 			CollisionShape2D.Disabled = true;
 			GD.Print("Player is dead!");
+
+			// await Task.Delay(TimeSpan.FromSeconds(5));
+			await ToSignal(GetTree().CreateTimer(3), SceneTreeTimer.SignalName.Timeout);
+
+			var level = GD.Load<PackedScene>("res://Scenes/main_menu.tscn");
+			GetTree().ChangeSceneToPacked(level);
 		}
+	}
+
+	public void Die()
+	{
+		_currentState = PlayerState.Dead;
 	}
 
 	public bool IsDead()

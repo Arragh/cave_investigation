@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://b8vdq2ws3fskj"]
+
+[ext_resource type="Script" uid="uid://bcuxvvr8iifcu" path="res://Scripts/MainMenu.cs" id="1_28flt"]
+[ext_resource type="Texture2D" uid="uid://b85tu03cpudrr" path="res://Assets/Tiles/Cave/ParallaxCave4.png" id="2_1ehe0"]
+[ext_resource type="Texture2D" uid="uid://dkutxkub6dqjg" path="res://Assets/Tiles/Cave/ParallaxCave1.png" id="3_ce3w2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ce3w2"]
+bg_color = Color(0.105663, 0.286719, 0.249338, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n45e2"]
+bg_color = Color(0.268398, 0.268398, 0.268398, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ehe0"]
+bg_color = Color(0.148503, 0.37743, 0.327556, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opfnp"]
+bg_color = Color(0.105882, 0.286275, 0.25098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cp0ys"]
+bg_color = Color(0.266667, 0.266667, 0.266667, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhxw7"]
+bg_color = Color(0.14902, 0.376471, 0.329412, 1)
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("StartNewGameButton", "ExitButton")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 2070.0
+offset_bottom = 1440.0
+script = ExtResource("1_28flt")
+StartNewGameButton = NodePath("StartNewGame")
+ExitButton = NodePath("Exit")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1036, 720)
+scale = Vector2(1.79861, 2.25)
+texture = ExtResource("2_1ehe0")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(1036, 720)
+scale = Vector2(1.79861, 1.32353)
+texture = ExtResource("3_ce3w2")
+
+[node name="StartNewGame" type="Button" parent="."]
+layout_mode = 2
+offset_left = 624.0
+offset_top = 512.0
+offset_right = 1448.0
+offset_bottom = 640.0
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 60
+theme_override_styles/hover = SubResource("StyleBoxFlat_ce3w2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n45e2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_1ehe0")
+text = "Новая игра"
+
+[node name="Exit" type="Button" parent="."]
+layout_mode = 2
+offset_left = 624.0
+offset_top = 768.0
+offset_right = 1448.0
+offset_bottom = 896.0
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 60
+theme_override_styles/hover = SubResource("StyleBoxFlat_opfnp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cp0ys")
+theme_override_styles/normal = SubResource("StyleBoxFlat_yhxw7")
+text = "Выход"

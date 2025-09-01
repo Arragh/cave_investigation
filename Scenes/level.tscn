@@ -1,0 +1,55 @@
+[gd_scene load_steps=11 format=3 uid="uid://b5rurb5ugd4dx"]
+
+[ext_resource type="PackedScene" uid="uid://d080n0yfmi8et" path="res://Scenes/player.tscn" id="1_bvt00"]
+[ext_resource type="Script" uid="uid://c1v08yjq6tj5y" path="res://Scripts/Level.cs" id="1_oqgf2"]
+[ext_resource type="PackedScene" uid="uid://hjri31e1ot81" path="res://Scenes/skeleton.tscn" id="2_oqgf2"]
+[ext_resource type="PackedScene" uid="uid://bsneyqkowppjt" path="res://Scenes/platform_big_1.tscn" id="3_qxfql"]
+[ext_resource type="PackedScene" uid="uid://bjlj4t0yppu3m" path="res://Scenes/platform_mid_1.tscn" id="4_ha31o"]
+[ext_resource type="PackedScene" uid="uid://18yy8xnwomnn" path="res://Scenes/platform_big_2.tscn" id="5_pa6b8"]
+[ext_resource type="PackedScene" uid="uid://b07n5nafsr7s1" path="res://Scenes/platform_big_3.tscn" id="6_crh0w"]
+[ext_resource type="PackedScene" uid="uid://cw4t8f85qiell" path="res://Scenes/wall.tscn" id="7_c7le1"]
+[ext_resource type="PackedScene" uid="uid://dhru1kvuoi6ml" path="res://Scenes/death_zone.tscn" id="8_2klc5"]
+[ext_resource type="PackedScene" uid="uid://k8y0lp75rto" path="res://Scenes/background.tscn" id="9_nngtn"]
+
+[node name="Level" type="Node" node_paths=PackedStringArray("StartSpawnPoint")]
+script = ExtResource("1_oqgf2")
+PlayerScene = ExtResource("1_bvt00")
+StartSpawnPoint = NodePath("PlayerSpawnPoint")
+
+[node name="Skeleton1" parent="." instance=ExtResource("2_oqgf2")]
+position = Vector2(3544, 936)
+
+[node name="Skeleton2" parent="." instance=ExtResource("2_oqgf2")]
+position = Vector2(1544, 936)
+
+[node name="Skeleton3" parent="." instance=ExtResource("2_oqgf2")]
+position = Vector2(8528, 1128)
+
+[node name="Skeleton4" parent="." instance=ExtResource("2_oqgf2")]
+position = Vector2(5240, 776)
+
+[node name="Platform_big_1" parent="." instance=ExtResource("3_qxfql")]
+position = Vector2(0, 1024)
+
+[node name="platform_mid_1" parent="." instance=ExtResource("4_ha31o")]
+position = Vector2(2336, 1024)
+
+[node name="platform_mid_1_2" parent="." instance=ExtResource("4_ha31o")]
+position = Vector2(3232, 1024)
+
+[node name="StaticBody2D" parent="." instance=ExtResource("5_pa6b8")]
+position = Vector2(4128, 864)
+
+[node name="Platform_big_3" parent="." instance=ExtResource("6_crh0w")]
+position = Vector2(6912, 1216)
+
+[node name="Wall1" parent="." instance=ExtResource("7_c7le1")]
+position = Vector2(-160, 160)
+
+[node name="DeathZone" parent="." instance=ExtResource("8_2klc5")]
+position = Vector2(0, 1664)
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("9_nngtn")]
+
+[node name="PlayerSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(128, 1088)
