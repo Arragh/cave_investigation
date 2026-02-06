@@ -1,6 +1,6 @@
 # Cave Investigation
 
-![Screenshot](screenshots/screenshot_1.jpg)
+![Screenshot](https://raw.githubusercontent.com/Arragh/cave_investigation/refs/heads/main/Screenshots/screenshot_1.jpg)
 
 ### Что применялось:
 1. Godot Engine 4.4
