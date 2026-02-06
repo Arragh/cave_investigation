@@ -1,17 +1,11 @@
-<div align="center">
-  <h3 align="center">Cave Investigation</h3>
+# Cave Investigation
 
-  <p align="center">
-    В качестве пробы движка Godot: один маленький уровень с несколькими врагами.
-  </p>
-</div>
+![Screenshot](screenshots/screenshot_1.jpg)
 
 ### Что применялось:
 1. Godot Engine 4.4
 2. C# & .NET 8
-3. Бесплатные спрайты с сайта [https://itch.io](https://itch.io)
+3. Бесплатные спрайты
 
-### Какие цели ставились:
-1. Посмотреть движок Godot
-2. Сделать первый шаг в геймдеве
-3. Понять, как работают игры изнутри
+### Зачем это?
+Да просто так!
